@@ -149,4 +149,92 @@ return [
             'deleted_at_helper' => '',
         ],
     ],
+    'internshipManagement' => [
+        'title'          => 'Internship management',
+        'title_singular' => 'Internship management',
+        'fields'         => [
+        ],
+    ],
+    'university' => [
+        'title'          => 'Universities',
+        'title_singular' => 'University',
+        'fields'         => [
+            'id' => 'ID',
+            'name' => 'Name',
+        ],
+    ],
+    'college' => [
+        'title'          => 'Colleges',
+        'title_singular' => 'College',
+        'fields'         => [
+            'id' => 'ID',
+            'university_id' => 'University',
+            'name' => 'Name',
+            'logo' => 'Logo',
+        ],
+    ],
+    'stream' => [
+        'title'          => 'Streams',
+        'title_singular' => 'Stream',
+        'fields'         => [
+            'id' => 'ID',
+            'college_id' => 'College',
+            'name' => 'Name',
+        ],
+    ],
+    'subject' => [
+        'title'          => 'Subjects',
+        'title_singular' => 'Subject',
+        'fields'         => [
+            'id' => 'ID',
+            'stream_id' => 'Stream',
+            'name' => 'Name',
+        ],
+    ],
+    'internship' => [
+        'title'          => 'Internships',
+        'title_singular' => 'Internship',
+        'fields'         => [
+            'id' => 'ID',
+            'name' => 'Name',
+            'duration_weeks' => 'Duration (weeks)',
+            'price' => 'Price (INR, excl. tax)',
+            'tax_percent' => 'Tax (%)',
+            'description' => 'Description',
+            'is_active' => 'Active',
+        ],
+    ],
+    'internshipClass' => [
+        'title'          => 'Classes',
+        'title_singular' => 'Class',
+        'fields'         => [
+            'id' => 'ID',
+            'title' => 'Title',
+            'internship' => 'Internship',
+            'college' => 'College',
+            'mode' => 'Mode',
+            'schedule' => 'Repeats',
+            'timing' => 'Timing',
+            'next_class' => 'Next class',
+            'is_active' => 'Active',
+        ],
+    ],
+    'internshipRegistration' => [
+        'title'          => 'Registrations',
+        'title_singular' => 'Registration',
+        'fields'         => [
+            'id' => 'ID',
+            'student' => 'Student',
+            'email' => 'Email',
+            'mobile' => 'Mobile',
+            'internship' => 'Internship',
+            'university' => 'University',
+            'college' => 'College',
+            'stream' => 'Stream',
+            'subject' => 'Subject',
+            'total_amount' => 'Total (INR)',
+            'status' => 'Status',
+            'paid_at' => 'Paid at',
+        ],
+    ],
 ];

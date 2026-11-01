@@ -17,9 +17,18 @@ class CourseScope implements Scope
      */
     public function apply(Builder $builder, Model $model)
     {
-        if(request()->is('admin/*') && auth()->user()->isInstitution())
-            $builder->whereHas('institution', function($query) {
-                $query->whereId(auth()->user()->institution_id);
+        if(!request()->is('admin/*')) {
+            return;
+        }
+
+        $user = auth()->user();
+
+        if($user->isCollegeAdmin()) {
+            $builder->where('college_id', $user->college_id);
+        } elseif($user->isInstitution()) {
+            $builder->whereHas('institution', function($query) use ($user) {
+                $query->whereId($user->institution_id);
             });
+        }
     }
 }

@@ -2,9 +2,11 @@
 
 return [
     'actions'                              => 'Actions',
+    'active'                               => 'Active',
     'add'                                  => 'Add',
     'allRightsReserved'                    => 'All rights reserved.',
     'areYouSure'                           => 'Are you sure?',
+    'cancel'                               => 'Cancel',
     'clickHereToVerify'                    => 'Click here to verify',
     'create'                               => 'Create',
     'dashboard'                            => 'Dashboard',
@@ -51,6 +53,9 @@ return [
     'youAreLoggedIn'                       => 'You are logged in!',
     'yourAccountNeedsAdminApproval'        => 'Your accounts needs an administrator approval in order to log in',
     'submit'                               => 'Submit',
+    'saved'                                => 'Saved successfully.',
+    'deleted'                              => 'Deleted successfully.',
+    'cannotDeleteInUse'                    => 'Cannot delete :name because it is still in use. Remove its related records first.',
     'datatables'                           => [
         'copy'          => 'Copy',
         'csv'           => 'CSV',

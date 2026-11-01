@@ -77,6 +77,25 @@
                     </em>
                 @endif
             </div>
+            <div class="form-group {{ $errors->has('college_id') ? 'has-error' : '' }}" id="collegeGroup" style="{{ (in_array(4, old('roles', [])) || isset($user) && $user->roles->contains(4)) ? '' : 'display:none' }}">
+                <label for="college">College (for College Admin Users)</label>
+                <select name="college_id" id="college" class="form-control select2">
+                    <option value="">-- Select College --</option>
+                    @foreach($colleges as $college)
+                        <option value="{{ $college->id }}" {{ (isset($user) && $user->college_id == $college->id) ? 'selected' : (old('college_id') == $college->id ? 'selected' : '') }}>
+                            {{ $college->name }} ({{ $college->university->name ?? 'N/A' }})
+                        </option>
+                    @endforeach
+                </select>
+                @if($errors->has('college_id'))
+                    <em class="invalid-feedback">
+                        {{ $errors->first('college_id') }}
+                    </em>
+                @endif
+                <p class="helper-block">
+                    Select a college to make this user a College Admin who sees only registrations from their college
+                </p>
+            </div>
             <div>
                 <input class="btn btn-danger" type="submit" value="{{ trans('global.save') }}">
             </div>
@@ -90,12 +109,23 @@
 @section('scripts')
 <script>
 $(document).ready(function() {
-    $('#roles').change(function() {
-        if($("#roles option:selected:contains('Institution')").val())
-            $("#institutionGroup:hidden").show(150);
-        else
-            $("#institutionGroup:visible").hide(150);
-    });
+    // Institution field: Institution role (2). College field: College Admin role (4) only.
+    function syncRoleFields(animate) {
+        var selected = $("#roles").val() || [];
+        var speed = animate ? 150 : 0;
+
+        if (selected.includes('2')) { $("#institutionGroup").show(speed); } else { $("#institutionGroup").hide(speed); }
+
+        if (selected.includes('4') && !selected.includes('2')) {
+            $("#collegeGroup").show(speed);
+        } else {
+            $("#collegeGroup").hide(speed);
+            if (animate) { $("#college").val('').trigger('change'); } // don't keep a stale college on other roles
+        }
+    }
+
+    $('#roles').change(function() { syncRoleFields(true); });
+    syncRoleFields(false);
 });
 </script>
 @endsection

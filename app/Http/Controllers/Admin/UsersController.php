@@ -7,6 +7,7 @@ use App\Http\Requests\MassDestroyUserRequest;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Institution;
+use App\College;
 use App\Role;
 use App\User;
 use Gate;
@@ -19,7 +20,10 @@ class UsersController extends Controller
     {
         abort_if(Gate::denies('user_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $users = User::all();
+        $actor = auth()->user();
+        $users = User::with('roles')->get()->filter(function ($user) use ($actor) {
+            return $actor->canManage($user);
+        })->values();
 
         return view('admin.users.index', compact('users'));
     }
@@ -28,11 +32,13 @@ class UsersController extends Controller
     {
         abort_if(Gate::denies('user_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $roles = Role::all()->pluck('title', 'id');
+        $roles = Role::whereIn('id', auth()->user()->assignableRoleIds())->pluck('title', 'id');
 
         $institutions = Institution::all()->pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
 
-        return view('admin.users.create', compact('roles', 'institutions'));
+        $colleges = College::with('university')->orderBy('name')->get();
+
+        return view('admin.users.create', compact('roles', 'institutions', 'colleges'));
     }
 
     public function store(StoreUserRequest $request)
@@ -46,18 +52,23 @@ class UsersController extends Controller
     public function edit(User $user)
     {
         abort_if(Gate::denies('user_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        $this->authorizeManage($user);
 
-        $roles = Role::all()->pluck('title', 'id');
+        $roles = Role::whereIn('id', auth()->user()->assignableRoleIds())->pluck('title', 'id');
 
         $institutions = Institution::all()->pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
 
+        $colleges = College::with('university')->orderBy('name')->get();
+
         $user->load('roles', 'institution');
 
-        return view('admin.users.edit', compact('roles', 'institutions', 'user'));
+        return view('admin.users.edit', compact('roles', 'institutions', 'colleges', 'user'));
     }
 
     public function update(UpdateUserRequest $request, User $user)
     {
+        $this->authorizeManage($user);
+
         $user->update($request->all());
         $user->roles()->sync($request->input('roles', []));
 
@@ -67,6 +78,7 @@ class UsersController extends Controller
     public function show(User $user)
     {
         abort_if(Gate::denies('user_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        $this->authorizeManage($user);
 
         $user->load('roles', 'institution');
 
@@ -76,6 +88,7 @@ class UsersController extends Controller
     public function destroy(User $user)
     {
         abort_if(Gate::denies('user_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        $this->authorizeManage($user);
 
         $user->delete();
 
@@ -84,8 +97,18 @@ class UsersController extends Controller
 
     public function massDestroy(MassDestroyUserRequest $request)
     {
-        User::whereIn('id', request('ids'))->delete();
+        $users = User::with('roles')->whereIn('id', request('ids'))->get();
+        $users->each(function ($user) {
+            $this->authorizeManage($user);
+        });
+
+        User::whereIn('id', $users->pluck('id'))->delete();
 
         return response(null, Response::HTTP_NO_CONTENT);
+    }
+
+    private function authorizeManage(User $user): void
+    {
+        abort_unless(auth()->user()->canManage($user), Response::HTTP_FORBIDDEN, '403 Forbidden');
     }
 }

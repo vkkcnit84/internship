@@ -1,6 +1,28 @@
 @extends('layouts.main')
 
 @section('content')
+<section style="padding: 40px 0; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="text-center" style="color: white;">
+                    <h2 style="margin-bottom: 20px; font-weight: bold;">
+                        <i class="fas fa-briefcase" style="margin-right: 12px;"></i>
+                        Looking for Paid Internships?
+                    </h2>
+                    <p style="font-size: 18px; margin-bottom: 25px; opacity: 0.95;">
+                        Register for internship programs and gain real-world experience with leading companies. Earn competitive stipends while building your career.
+                    </p>
+                    <a href="{{ route('internship.register') }}" class="btn btn-light" style="font-weight: bold; padding: 12px 35px; font-size: 16px;">
+                        <i class="fas fa-arrow-right" style="margin-right: 8px;"></i>
+                        Register Now
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
 <section class="special_cource padding_top">
     <div class="container">
         <div class="row justify-content-center">

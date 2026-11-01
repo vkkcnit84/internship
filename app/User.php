@@ -38,6 +38,7 @@ class User extends Authenticatable
         'deleted_at',
         'remember_token',
         'institution_id',
+        'college_id',
         'email_verified_at',
     ];
 
@@ -73,13 +74,76 @@ class User extends Authenticatable
         return $this->belongsToMany(Role::class);
     }
 
+    /**
+     * Ids of the roles this user may assign. Admin (role 1) can always assign every role.
+     */
+    public function assignableRoleIds(): array
+    {
+        if ($this->isAdmin()) {
+            return Role::pluck('id')->all();
+        }
+
+        return $this->roles()->with('assignableRoles')->get()
+            ->flatMap(function ($role) {
+                return $role->assignableRoles->pluck('id');
+            })
+            ->unique()->values()->all();
+    }
+
+    /**
+     * A user can be managed (listed, edited, deleted) only if every role they hold is one the actor may assign.
+     */
+    public function canManage(User $target): bool
+    {
+        if ($this->isAdmin()) {
+            return true;
+        }
+
+        return empty(array_diff($target->roles->pluck('id')->all(), $this->assignableRoleIds()));
+    }
+
     public function institution()
     {
         return $this->belongsTo(Institution::class, 'institution_id');
     }
 
+    public function college()
+    {
+        return $this->belongsTo(College::class, 'college_id');
+    }
+
+    public function studentProfile()
+    {
+        return $this->hasOne(StudentProfile::class, 'user_id', 'id');
+    }
+
+    public function internshipRegistrations()
+    {
+        return $this->hasMany(InternshipRegistration::class, 'user_id', 'id');
+    }
+
+    public function isAdmin()
+    {
+        return $this->roles->contains(1);
+    }
+
     public function isInstitution()
     {
         return $this->roles->contains(2);
+    }
+
+    public function isStudent()
+    {
+        return $this->roles->contains(3);
+    }
+
+    public function isStudentOnly()
+    {
+        return $this->isStudent() && $this->roles->count() === 1;
+    }
+
+    public function isCollegeAdmin()
+    {
+        return $this->roles->contains(4);
     }
 }

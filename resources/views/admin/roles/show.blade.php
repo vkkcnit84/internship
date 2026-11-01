@@ -36,6 +36,22 @@
                             @endforeach
                         </td>
                     </tr>
+                    <tr>
+                        <th>
+                            Can assign roles
+                        </th>
+                        <td>
+                            @if($role->id === 1)
+                                <em>All roles</em>
+                            @else
+                                @forelse($role->assignableRoles as $assignable)
+                                    <span class="label label-info label-many">{{ $assignable->title }}</span>
+                                @empty
+                                    <em>None</em>
+                                @endforelse
+                            @endif
+                        </td>
+                    </tr>
                 </tbody>
             </table>
             <a style="margin-top:20px;" class="btn btn-default" href="{{ url()->previous() }}">

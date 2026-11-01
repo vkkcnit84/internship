@@ -26,6 +26,7 @@
                 <label for="permissions">{{ trans('cruds.role.fields.permissions') }}*
                     <span class="btn btn-info btn-xs select-all">{{ trans('global.select_all') }}</span>
                     <span class="btn btn-info btn-xs deselect-all">{{ trans('global.deselect_all') }}</span></label>
+                @include('admin.roles._permission_picker')
                 <select name="permissions[]" id="permissions" class="form-control select2" multiple="multiple" required>
                     @foreach($permissions as $id => $permissions)
                         <option value="{{ $id }}" {{ (in_array($id, old('permissions', [])) || isset($role) && $role->permissions->contains($id)) ? 'selected' : '' }}>{{ $permissions }}</option>
@@ -40,6 +41,7 @@
                     {{ trans('cruds.role.fields.permissions_helper') }}
                 </p>
             </div>
+            @include('admin.roles._assignable_roles')
             <div>
                 <input class="btn btn-danger" type="submit" value="{{ trans('global.save') }}">
             </div>
@@ -48,4 +50,8 @@
 
     </div>
 </div>
+@endsection
+@section('scripts')
+@parent
+@include('admin.roles._permission_picker_script')
 @endsection

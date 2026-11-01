@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Course;
+use App\College;
 use App\Discipline;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Traits\MediaUploadingTrait;
@@ -32,15 +33,21 @@ class CoursesController extends Controller
         abort_if(Gate::denies('course_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         $institutions = Institution::all()->pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
+        $colleges = College::with('university')->orderBy('name')->get();
 
         $disciplines = Discipline::all()->pluck('name', 'id');
 
-        return view('admin.courses.create', compact('institutions', 'disciplines'));
+        return view('admin.courses.create', compact('institutions', 'colleges', 'disciplines'));
     }
 
     public function store(StoreCourseRequest $request)
     {
-        $course = Course::create($request->all());
+        $data = $request->all();
+        if(auth()->user()->isCollegeAdmin()) {
+            $data['college_id'] = auth()->user()->college_id;
+            $data['institution_id'] = null;
+        }
+        $course = Course::create($data);
         $course->disciplines()->sync($request->input('disciplines', []));
 
         if ($request->input('photo', false)) {
@@ -55,17 +62,23 @@ class CoursesController extends Controller
         abort_if(Gate::denies('course_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         $institutions = Institution::all()->pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
+        $colleges = College::with('university')->orderBy('name')->get();
 
         $disciplines = Discipline::all()->pluck('name', 'id');
 
         $course->load('institution', 'disciplines');
 
-        return view('admin.courses.edit', compact('institutions', 'disciplines', 'course'));
+        return view('admin.courses.edit', compact('institutions', 'colleges', 'disciplines', 'course'));
     }
 
     public function update(UpdateCourseRequest $request, Course $course)
     {
-        $course->update($request->all());
+        $data = $request->all();
+        if(auth()->user()->isCollegeAdmin()) {
+            $data['college_id'] = auth()->user()->college_id;
+            $data['institution_id'] = null;
+        }
+        $course->update($data);
         $course->disciplines()->sync($request->input('disciplines', []));
 
         if ($request->input('photo', false)) {

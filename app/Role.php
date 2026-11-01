@@ -33,4 +33,12 @@ class Role extends Model
     {
         return $this->belongsToMany(Permission::class);
     }
+
+    /**
+     * Roles that a user holding this role may assign to other users.
+     */
+    public function assignableRoles()
+    {
+        return $this->belongsToMany(self::class, 'role_assignable', 'role_id', 'assignable_role_id');
+    }
 }

@@ -28,14 +28,16 @@ class RolesController extends Controller
         abort_if(Gate::denies('role_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         $permissions = Permission::all()->pluck('title', 'id');
+        $allRoles    = Role::pluck('title', 'id');
 
-        return view('admin.roles.create', compact('permissions'));
+        return view('admin.roles.create', compact('permissions', 'allRoles'));
     }
 
     public function store(StoreRoleRequest $request)
     {
         $role = Role::create($request->all());
         $role->permissions()->sync($request->input('permissions', []));
+        $role->assignableRoles()->sync($request->input('assignable_roles', []));
 
         return redirect()->route('admin.roles.index');
     }
@@ -46,15 +48,17 @@ class RolesController extends Controller
 
         $permissions = Permission::all()->pluck('title', 'id');
 
-        $role->load('permissions');
+        $role->load('permissions', 'assignableRoles');
+        $allRoles = Role::pluck('title', 'id');
 
-        return view('admin.roles.edit', compact('permissions', 'role'));
+        return view('admin.roles.edit', compact('permissions', 'role', 'allRoles'));
     }
 
     public function update(UpdateRoleRequest $request, Role $role)
     {
         $role->update($request->all());
         $role->permissions()->sync($request->input('permissions', []));
+        $role->assignableRoles()->sync($request->input('assignable_roles', []));
 
         return redirect()->route('admin.roles.index');
     }
@@ -63,7 +67,7 @@ class RolesController extends Controller
     {
         abort_if(Gate::denies('role_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $role->load('permissions');
+        $role->load('permissions', 'assignableRoles');
 
         return view('admin.roles.show', compact('role'));
     }

@@ -33,6 +33,7 @@ class Course extends Model implements HasMedia
         'deleted_at',
         'description',
         'institution_id',
+        'college_id',
     ];
 
     protected static function boot()
@@ -67,6 +68,11 @@ class Course extends Model implements HasMedia
     public function institution()
     {
         return $this->belongsTo(Institution::class, 'institution_id');
+    }
+
+    public function college()
+    {
+        return $this->belongsTo(College::class, 'college_id');
     }
 
     public function disciplines()

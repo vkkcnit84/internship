@@ -25,6 +25,10 @@ class UpdateRoleRequest extends FormRequest
             'permissions.*' => [
                 'integer',
             ],
+            'assignable_roles.*' => [
+                'integer',
+                'exists:roles,id',
+            ],
             'permissions'   => [
                 'required',
                 'array',

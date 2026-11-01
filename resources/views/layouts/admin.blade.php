@@ -21,6 +21,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.5.1/min/dropzone.min.css" rel="stylesheet" />
     <link href="{{ asset('css/custom.css') }}" rel="stylesheet" />
+    <link href="{{ asset('css/admin-modern.css') }}?v={{ filemtime(public_path('css/admin-modern.css')) }}" rel="stylesheet" />
     @yield('styles')
 </head>
 
@@ -29,9 +30,23 @@
         <button class="navbar-toggler sidebar-toggler d-lg-none mr-auto" type="button" data-toggle="sidebar-show">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <a class="navbar-brand" href="#">
-            <span class="navbar-brand-full">{{ trans('panel.site_title') }}</span>
-            <span class="navbar-brand-minimized">{{ trans('panel.site_title') }}</span>
+        @php
+            $brandUser    = auth()->user();
+            $brandCollege = null;
+            if ($brandUser && $brandUser->isCollegeAdmin() && $brandUser->college_id) {
+                $brandCollege = $brandUser->college;
+            } elseif ($brandUser && $brandUser->isStudentOnly()) {
+                $brandCollege = optional($brandUser->studentProfile)->college ?: $brandUser->college;
+            }
+            $brandLogo = $brandCollege ? $brandCollege->logo_url : null;
+        @endphp
+        <a class="navbar-brand" href="{{ route('admin.home') }}">
+            @if($brandLogo)
+                <img class="brand-logo" src="{{ $brandLogo }}" alt="{{ $brandCollege->name }}" title="{{ $brandCollege->name }}">
+            @else
+                <span class="navbar-brand-full">{{ trans('panel.site_title') }}</span>
+                <span class="navbar-brand-minimized">{{ trans('panel.site_title') }}</span>
+            @endif
         </a>
         <button class="navbar-toggler sidebar-toggler d-md-down-none" type="button" data-toggle="sidebar-lg-show">
             <span class="navbar-toggler-icon"></span>
@@ -51,7 +66,45 @@
                 </li>
             @endif
 
-
+            @auth
+                @php
+                    $me          = auth()->user();
+                    $myRoles     = $me->roles->pluck('title')->implode(', ');
+                    $myProfile   = $me->studentProfile;
+                    $myCollege   = $me->college ?: optional($myProfile)->college;
+                    $myUniversity = optional($myCollege)->university ?: optional($myProfile)->university;
+                    $myInstitution = $me->institution;
+                @endphp
+                <li class="nav-item dropdown user-menu">
+                    <a class="nav-link user-menu-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                        <span class="user-avatar">{{ strtoupper(mb_substr($me->name, 0, 1)) }}</span>
+                        <span class="user-meta d-md-down-none">
+                            <strong>{{ $me->name }}</strong>
+                            <small>{{ $myRoles ?: 'User' }}</small>
+                        </span>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right user-card">
+                        <div class="user-card-head">
+                            <span class="user-avatar user-avatar-lg">{{ strtoupper(mb_substr($me->name, 0, 1)) }}</span>
+                            <div>
+                                <strong>{{ $me->name }}</strong>
+                                <div class="user-card-email">{{ $me->email }}</div>
+                            </div>
+                        </div>
+                        <dl class="user-card-details">
+                            <dt>Role</dt><dd>{{ $myRoles ?: '-' }}</dd>
+                            @if($myUniversity)<dt>University</dt><dd>{{ $myUniversity->name }}</dd>@endif
+                            @if($myCollege)<dt>College</dt><dd>{{ $myCollege->name }}</dd>@endif
+                            @if($myInstitution)<dt>Institution</dt><dd>{{ $myInstitution->name }}</dd>@endif
+                            @if($myProfile && $myProfile->mobile)<dt>Mobile</dt><dd>{{ $myProfile->mobile }}</dd>@endif
+                            @if($myProfile && $myProfile->roll_number)<dt>Roll no.</dt><dd>{{ $myProfile->roll_number }}</dd>@endif
+                        </dl>
+                        <a class="dropdown-item user-card-logout" href="#" onclick="event.preventDefault(); document.getElementById('logoutform').submit();">
+                            <i class="fas fa-sign-out-alt"></i> {{ trans('global.logout') }}
+                        </a>
+                    </div>
+                </li>
+            @endauth
         </ul>
     </header>
 
@@ -196,6 +249,17 @@
   });
 
   $.fn.dataTable.ext.classes.sPageButton = '';
+
+  function adjustTables() {
+    $.fn.dataTable.tables({ visible: true, api: true }).columns.adjust();
+  }
+  $('.sidebar-toggler').on('click', function () {
+    setTimeout(adjustTables, 350);
+  });
+  $('.main').on('transitionend', function (e) {
+    if (e.target === this) { adjustTables(); }
+  });
+  $(window).on('resize', adjustTables);
 });
 
     </script>

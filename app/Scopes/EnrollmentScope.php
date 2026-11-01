@@ -17,9 +17,20 @@ class EnrollmentScope implements Scope
      */
     public function apply(Builder $builder, Model $model)
     {
-        if(request()->is('admin/*') && auth()->user()->isInstitution())
-            $builder->whereHas('course.institution', function($query) {
-                $query->whereId(auth()->user()->institution_id);
+        if(!request()->is('admin/*')) {
+            return;
+        }
+
+        $user = auth()->user();
+
+        if($user->isCollegeAdmin()) {
+            $builder->whereHas('course', function($q) use ($user) {
+                $q->where('college_id', $user->college_id);
             });
+        } elseif($user->isInstitution()) {
+            $builder->whereHas('course.institution', function($query) use ($user) {
+                $query->whereId($user->institution_id);
+            });
+        }
     }
 }

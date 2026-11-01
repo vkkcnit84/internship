@@ -17,8 +17,29 @@ Route::post('enroll/{course}', 'EnrollmentController@store')->name('enroll.store
 Route::get('my-courses', 'EnrollmentController@myCourses')->name('enroll.myCourses')->middleware('auth');
 Route::resource('courses', 'CourseController')->only(['index', 'show']);
 
+// Internship registration (separate from the course enroll flow above)
+Route::group(['prefix' => 'internship', 'as' => 'internship.'], function () {
+    Route::get('register', 'InternshipRegistrationController@create')->name('register');
+    Route::post('register', 'InternshipRegistrationController@store')->name('register.store');
+
+    // Dependent dropdowns: University -> College -> Stream -> Subject
+    Route::get('lookup/colleges', 'InternshipLookupController@colleges')->name('lookup.colleges')->middleware('throttle:60,1');
+    Route::get('lookup/streams', 'InternshipLookupController@streams')->name('lookup.streams')->middleware('throttle:60,1');
+    Route::get('lookup/subjects', 'InternshipLookupController@subjects')->name('lookup.subjects')->middleware('throttle:60,1');
+
+    // Payment (Razorpay)
+    Route::post('razorpay/webhook', 'InternshipPaymentController@webhook')->name('payment.webhook');
+    Route::group(['middleware' => ['auth']], function () {
+        Route::get('registration/{registration}', 'InternshipPaymentController@show')->name('registration.show');
+        Route::post('registration/{registration}/order', 'InternshipPaymentController@order')->name('payment.order')->middleware('throttle:10,1');
+        Route::post('registration/{registration}/verify', 'InternshipPaymentController@verify')->name('payment.verify')->middleware('throttle:10,1');
+    });
+});
+
 Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'middleware' => ['auth']], function () {
     Route::get('/', 'HomeController@index')->name('home');
+    Route::get('my-profile', 'StudentPortalController@profile')->name('student.profile');
+    Route::get('welcome-letter', 'StudentPortalController@welcomeLetter')->name('student.welcome-letter');
     // Permissions
     Route::delete('permissions/destroy', 'PermissionsController@massDestroy')->name('permissions.massDestroy');
     Route::resource('permissions', 'PermissionsController');
@@ -48,4 +69,28 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     // Enrollments
     Route::delete('enrollments/destroy', 'EnrollmentsController@massDestroy')->name('enrollments.massDestroy');
     Route::resource('enrollments', 'EnrollmentsController');
+
+    // Internship management
+    Route::delete('universities/destroy', 'UniversitiesController@massDestroy')->name('universities.massDestroy');
+    Route::resource('universities', 'UniversitiesController');
+
+    Route::delete('colleges/destroy', 'CollegesController@massDestroy')->name('colleges.massDestroy');
+    Route::resource('colleges', 'CollegesController');
+
+    Route::delete('streams/destroy', 'StreamsController@massDestroy')->name('streams.massDestroy');
+    Route::resource('streams', 'StreamsController');
+
+    Route::delete('subjects/destroy', 'SubjectsController@massDestroy')->name('subjects.massDestroy');
+    Route::resource('subjects', 'SubjectsController');
+
+    Route::delete('internships/destroy', 'InternshipsController@massDestroy')->name('internships.massDestroy');
+    Route::resource('internships', 'InternshipsController');
+
+    Route::resource('internship-classes', 'InternshipClassesController');
+
+    Route::get('internship-registrations', 'InternshipRegistrationsController@index')->name('internship-registrations.index');
+    Route::post('internship-registrations/{registration}/approve', 'InternshipRegistrationsController@approve')->name('internship-registrations.approve');
+    Route::post('internship-registrations/{registration}/reject', 'InternshipRegistrationsController@reject')->name('internship-registrations.reject');
+    Route::post('internship-registrations/{registration}/mark-paid', 'InternshipRegistrationsController@markPaid')->name('internship-registrations.mark-paid');
+    Route::post('internship-registrations/{registration}/mark-unpaid', 'InternshipRegistrationsController@markUnpaid')->name('internship-registrations.mark-unpaid');
 });
