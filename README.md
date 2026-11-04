@@ -4,7 +4,7 @@ Here's the original task description on Upwork:
 
 ---
 
-We implemented the task with the help of our [QuickAdminPanel](https://quickadminpanel.com) and front-end theme called [Etrain](https://colorlib.com/wp/template/etrain/) by [Colorlib](https://colorlib.com)
+We implemented the task with the help of our [QuickAdminPanel](https://quickadminpanel.com) and the InternshipKaro front-end branding
 
 ---
 

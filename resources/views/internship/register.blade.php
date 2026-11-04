@@ -2,22 +2,36 @@
 
 @section('content')
 <style>
-    .ireg { background: #f6f3ee; padding: 40px 0 60px; }
-    .ireg-side { background: #1e2a38; color: #fff; border-radius: 12px; padding: 36px 30px; height: 100%; }
-    .ireg-side .eyebrow { color: #e0705a; font-size: 12px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; }
-    .ireg-side h2 { color: #fff; font-size: 34px; line-height: 1.2; margin: 14px 0 18px; }
-    .ireg-side p, .ireg-side li { color: #c9d1da; }
-    .ireg-side ul { padding-left: 18px; margin-top: 20px; }
-    .ireg-side li { margin-bottom: 10px; }
-    .ireg-card { background: #fff; border: 1px solid #ece8e1; border-radius: 14px; padding: 26px 24px 8px; margin-bottom: 22px; }
-    .ireg-card h6 { color: #e0705a; font-size: 12px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 18px; }
-    .ireg label { font-weight: 600; font-size: 13px; color: #1e2a38; margin-bottom: 6px; }
-    .ireg .form-control { height: 46px; border-radius: 10px; }
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+    .ireg { font-family: 'Inter', sans-serif; background: linear-gradient(180deg, #f1f5f9 0%, #f8fafc 100%); padding: 48px 0 72px; }
+    .ireg-side {
+        position: sticky; top: 24px; color: #fff; border-radius: 16px; padding: 40px 32px; overflow: hidden;
+        background: linear-gradient(135deg, #0f172a 0%, #1e293b 55%, #14532d 130%);
+        box-shadow: 0 20px 40px -20px rgba(15,23,42,.5);
+    }
+    .ireg-side::before { content: ''; position: absolute; width: 260px; height: 260px; border-radius: 50%; background: #22c55e; opacity: .15; top: -90px; right: -90px; }
+    .ireg-side > * { position: relative; }
+    .ireg-side .eyebrow { display: inline-block; color: #22c55e; background: rgba(34,197,94,.15); padding: 5px 12px; border-radius: 20px; font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; }
+    .ireg-side h2 { color: #fff; font-size: 30px; font-weight: 700; line-height: 1.25; margin: 18px 0 14px; }
+    .ireg-side p { color: #cbd5e1; }
+    .ireg-side ul { list-style: none; padding: 0; margin: 28px 0 0; }
+    .ireg-side li { display: flex; align-items: center; color: #e2e8f0; margin-bottom: 14px; }
+    .ireg-side li::before { content: '\2713'; flex: 0 0 28px; height: 28px; line-height: 28px; text-align: center; margin-right: 12px; border-radius: 8px; background: rgba(34,197,94,.2); color: #22c55e; font-weight: 700; }
+    .ireg-title { font-size: 28px; font-weight: 700; color: #1e293b; margin-bottom: 6px; }
+    .ireg-sub { color: #64748b; margin-bottom: 24px; }
+    .ireg-sub a { color: #16a34a; font-weight: 600; }
+    .ireg-card { background: #fff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 26px 26px 8px; margin-bottom: 22px; box-shadow: 0 4px 14px -8px rgba(15,23,42,.12); }
+    .ireg-card h6 { display: flex; align-items: center; color: #1e293b; font-size: 15px; font-weight: 700; margin-bottom: 20px; padding-bottom: 14px; border-bottom: 1px solid #f1f5f9; }
+    .ireg-card h6 .step { width: 28px; height: 28px; line-height: 28px; text-align: center; border-radius: 50%; background: #22c55e; color: #fff; font-size: 13px; margin-right: 10px; }
+    .ireg label { font-weight: 500; font-size: 13px; color: #334155; margin-bottom: 6px; }
+    .ireg .form-control { height: 46px; border-radius: 8px; border: 1px solid #e2e8f0; background: #f8fafc; }
+    .ireg .form-control:focus { background: #fff; border-color: #22c55e; box-shadow: 0 0 0 3px rgba(34,197,94,.18); }
     .ireg .form-control:disabled { background: #eceef1; }
+    .ireg .form-check-input { accent-color: #22c55e; }
     .ireg .invalid-feedback { display: block; }
-    .ireg .btn-register { background: #e0705a; border: 0; color: #fff; font-weight: 600; width: 100%; padding: 14px; border-radius: 10px; font-size: 16px; }
-    .ireg .btn-register:hover { background: #cf5f49; }
-    .ireg .price-hint { font-size: 13px; color: #6b7785; margin-top: 6px; }
+    .ireg .btn-register { background: #22c55e; border: 0; color: #fff; font-weight: 600; width: 100%; padding: 14px; border-radius: 10px; font-size: 16px; transition: background .2s; box-shadow: 0 8px 20px -8px rgba(34,197,94,.7); }
+    .ireg .btn-register:hover { background: #16a34a; }
+    .ireg .price-hint { font-size: 13px; color: #16a34a; font-weight: 500; margin-top: 6px; }
 </style>
 
 <div class="ireg">
@@ -48,14 +62,14 @@
                     </div>
                 @endif
 
-                <h3 class="mb-3">Student Registration</h3>
-                <p class="mb-4">Already registered? <a href="{{ route('login') }}">Log in</a> to continue your payment.</p>
+                <h3 class="ireg-title">Student Registration</h3>
+                <p class="ireg-sub">Already registered? <a href="{{ route('login') }}">Log in</a> to continue your payment.</p>
 
                 <form id="internshipForm" method="POST" action="{{ route('internship.register.store') }}" novalidate>
                     @csrf
 
                     <div class="ireg-card">
-                        <h6>Personal Details</h6>
+                        <h6><span class="step">1</span>Personal Details</h6>
                         <div class="form-row">
                             <div class="form-group col-md-6">
                                 <label for="name">Full Name</label>
@@ -109,7 +123,7 @@
                     </div>
 
                     <div class="ireg-card">
-                        <h6>Academic Details</h6>
+                        <h6><span class="step">2</span>Academic Details</h6>
                         <div class="form-row">
                             <div class="form-group col-md-6">
                                 <label for="university_id">University</label>
@@ -217,7 +231,7 @@
                     </div>
 
                     <div class="ireg-card">
-                        <h6>Payment Method</h6>
+                        <h6><span class="step">3</span>Payment Method</h6>
                         <div class="form-row">
                             <div class="form-group col-md-12">
                                 <label>Select Payment Method</label>

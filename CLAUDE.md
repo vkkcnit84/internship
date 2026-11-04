@@ -4,7 +4,7 @@ This file guides Claude Code (claude.ai/code) when it works in this repository.
 
 ## Project
 
-This is a course enrollment app with an admin panel, built on **Laravel 8.6** (PHP ^7.3). The admin panel was generated with QuickAdminPanel (CoreUI 2 + Bootstrap 4 + jQuery DataTables). The public site uses the Colorlib "Etrain" theme. The plan is to grow it into a full course-management admin panel. A paid **internship registration** module (see below) now sits alongside the original course enrollment.
+This is a course enrollment app with an admin panel, built on **Laravel 8.6** (PHP ^7.3). The admin panel was generated with QuickAdminPanel (CoreUI 2 + Bootstrap 4 + jQuery DataTables). The public site uses a Colorlib-based theme re-branded as InternshipKaro (site: http://internshipkaro.in/; the static marketing site lives in `internshipkaro-site/`). The plan is to grow it into a full course-management admin panel. A paid **internship registration** module (see below) now sits alongside the original course enrollment.
 
 ## Running locally (MAMP)
 
@@ -96,7 +96,7 @@ A separate, paid flow for UGC internships. It does not touch the course enroll f
 - **Status page:** `GET /internship/registration/{registration}` (owner only) shows the summary and the Pay button. `POST .../order` creates or reuses the Razorpay order from the server-side amount, and `POST .../verify` checks the signature. A signed-in student with an existing registration who opens the form is redirected to this page.
 - **Gotchas:**
   - The unique `name` rules ignore soft-deleted rows and the DB indexes on `name` are deliberately not unique, so a deleted name can be reused. Uniqueness for College, Stream and Subject is per parent.
-  - The Etrain theme's `custom.js` turns every `<select>` into a nice-select widget. The registration form destroys it on page load so the dynamic dropdowns work.
+  - The front-end theme's `custom.js` turns every `<select>` into a nice-select widget. The registration form destroys it on page load so the dynamic dropdowns work.
   - The webhook route is listed in `VerifyCsrfToken::$except`.
   - `User::studentProfile()` and `User::internshipRegistrations()` were added to the existing `User` model.
 - **Seed data:** two placeholder internships (₹999 and ₹1499, no duration) were seeded into the dev DB. The University/College/Stream/Subject tables start empty, and the admin adds that data.

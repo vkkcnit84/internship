@@ -3,8 +3,8 @@
         <div class="row align-items-center">
             <div class="col-lg-12">
                 <nav class="navbar navbar-expand-lg navbar-light">
-                    <a class="navbar-brand logo_1" href="{{ route('home') }}"> <img src="{{ asset('img/single_page_logo.png') }}" alt="logo"> </a>
-                    <a class="navbar-brand logo_2" href="{{ route('home') }}"> <img src="{{ asset('img/logo.png') }}" alt="logo"> </a>
+                    <a class="navbar-brand logo_1" href="{{ route('home') }}"> <img src="{{ asset('img/single_page_logo.png') }}" alt="InternshipKaro"> </a>
+                    <a class="navbar-brand logo_2" href="{{ route('home') }}"> <img src="{{ asset('img/logo.png') }}" alt="InternshipKaro"> </a>
                     <button class="navbar-toggler" type="button" data-toggle="collapse"
                         data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
@@ -19,6 +19,12 @@
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ route('courses.index') }}">Courses</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('internship.register') }}">Register</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="http://internshipkaro.in/">InternshipKaro.in</a>
                             </li>
                             @if($menuDisciplines->count())
                                 <li class="nav-item dropdown">
@@ -44,7 +50,24 @@
                                     </div>
                                 </li>
                             @endif
+                            @guest
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" id="loginDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Login
+                                    </a>
+                                    <div class="dropdown-menu" aria-labelledby="loginDropdown">
+                                        <a class="dropdown-item" href="{{ route('login') }}">Student Login</a>
+                                        <a class="dropdown-item" href="{{ route('login') }}">Admin Login</a>
+                                    </div>
+                                </li>
+                                <li class="d-none d-lg-block">
+                                    <a class="btn_1" href="{{ route('internship.register') }}">Register Now</a>
+                                </li>
+                            @endguest
                             @auth
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ route('admin.home') }}">Dashboard</a>
+                                </li>
                                 <li class="nav-item">
                                     <a class="nav-link" href="{{ route('enroll.myCourses') }}">My Courses</a>
                                 </li>
