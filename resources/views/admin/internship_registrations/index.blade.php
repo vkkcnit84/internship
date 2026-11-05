@@ -67,7 +67,10 @@
                         <th>{{ trans('cruds.internshipRegistration.fields.college') }}</th>
                         <th>{{ trans('cruds.internshipRegistration.fields.stream') }}</th>
                         <th>{{ trans('cruds.internshipRegistration.fields.subject') }}</th>
-                        <th>{{ trans('cruds.internshipRegistration.fields.total_amount') }}</th>
+                        <th>Session</th>
+                        @can('internship_registration_amount_view')
+                            <th>{{ trans('cruds.internshipRegistration.fields.total_amount') }}</th>
+                        @endcan
                         <th>Payment Method</th>
                         <th>{{ trans('cruds.internshipRegistration.fields.status') }}</th>
                         <th>Approval Status</th>
@@ -93,7 +96,10 @@
                             <td>{{ $profile->college->name ?? '' }}</td>
                             <td>{{ $profile->stream->name ?? '' }}</td>
                             <td>{{ $profile->subject->name ?? '' }}</td>
-                            <td>&#8377;{{ number_format($registration->total_amount, 2) }}</td>
+                            <td>{{ $profile->academic_session ?? '' }}</td>
+                            @can('internship_registration_amount_view')
+                                <td>&#8377;{{ number_format($registration->total_amount, 2) }}</td>
+                            @endcan
                             <td>{{ \App\InternshipRegistration::PAYMENT_METHODS[$registration->payment_method] ?? $registration->payment_method }}</td>
                             <td>{{ \App\InternshipRegistration::STATUS_SELECT[$registration->status] ?? $registration->status }}</td>
                             <td>
@@ -111,6 +117,12 @@
                             </td>
                             <td>{{ optional($registration->paid_at)->format(config('panel.date_format') . ' ' . config('panel.time_format')) }}</td>
                             <td style="min-width: 250px;">
+                                <a class="btn btn-xs btn-outline-primary" href="{{ route('admin.internship-registrations.consent-letter', $registration) }}" target="_blank" title="View / download consent letter">
+                                    <i class="fas fa-file-alt"></i> Consent Letter
+                                </a>
+                                <a class="btn btn-xs btn-outline-primary" href="{{ route('admin.internship-registrations.acceptance-letter', $registration) }}" target="_blank" title="View / download internship acceptance letter">
+                                    <i class="fas fa-file-signature"></i> Acceptance Letter
+                                </a>
                                 @if($registration->payment_method === 'offline')
                                     @if($registration->approval_status === 'pending')
                                         @can('internship_registration_approve')

@@ -153,7 +153,7 @@
                                     <thead class="bg-light">
                                         <tr>
                                             <th style="border: none; padding: 16px;">Student Name</th>
-                                            <th style="border: none; padding: 16px;">Stream / Subject</th>
+                                            <th style="border: none; padding: 16px;">Course (Stream) / Major Subject</th>
                                             <th style="border: none; padding: 16px;">Program</th>
                                             <th style="border: none; padding: 16px;">Status</th>
                                             <th style="border: none; padding: 16px;">Amount</th>
@@ -249,7 +249,7 @@
                             <i class="fas fa-laptop"></i>
                         </div>
                         <div class="stat-number">{{ $stats['total_internships'] ?? 0 }}</div>
-                        <div class="stat-label">Internship Programs</div>
+                        <div class="stat-label">Internship Domains</div>
                     </div>
                 </div>
             </div>

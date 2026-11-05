@@ -40,6 +40,8 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::get('/', 'HomeController@index')->name('home');
     Route::get('my-profile', 'StudentPortalController@profile')->name('student.profile');
     Route::get('welcome-letter', 'StudentPortalController@welcomeLetter')->name('student.welcome-letter');
+    Route::get('registration-slip', 'StudentPortalController@registrationSlip')->name('student.registration-slip');
+    Route::get('acceptance-letter', 'StudentPortalController@acceptanceLetter')->name('student.acceptance-letter');
     // Permissions
     Route::delete('permissions/destroy', 'PermissionsController@massDestroy')->name('permissions.massDestroy');
     Route::resource('permissions', 'PermissionsController');
@@ -89,6 +91,8 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::resource('internship-classes', 'InternshipClassesController');
 
     Route::get('internship-registrations', 'InternshipRegistrationsController@index')->name('internship-registrations.index');
+    Route::get('internship-registrations/{registration}/consent-letter', 'InternshipRegistrationsController@consentLetter')->name('internship-registrations.consent-letter');
+    Route::get('internship-registrations/{registration}/acceptance-letter', 'InternshipRegistrationsController@acceptanceLetter')->name('internship-registrations.acceptance-letter');
     Route::post('internship-registrations/{registration}/approve', 'InternshipRegistrationsController@approve')->name('internship-registrations.approve');
     Route::post('internship-registrations/{registration}/reject', 'InternshipRegistrationsController@reject')->name('internship-registrations.reject');
     Route::post('internship-registrations/{registration}/mark-paid', 'InternshipRegistrationsController@markPaid')->name('internship-registrations.mark-paid');

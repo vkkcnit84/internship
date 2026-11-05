@@ -8,7 +8,7 @@
                 <div class="text-center" style="color: white;">
                     <h2 style="margin-bottom: 20px; font-weight: bold;">
                         <i class="fas fa-briefcase" style="margin-right: 12px;"></i>
-                        Looking for Paid Internships?
+                        Looking for a Paid Internships?
                     </h2>
                     <p style="font-size: 18px; margin-bottom: 25px; opacity: 0.95;">
                         Register for internship programs and gain real-world experience with leading companies. Earn competitive stipends while building your career.

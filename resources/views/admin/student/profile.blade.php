@@ -26,12 +26,12 @@
             <tbody>
                 <tr><th style="width: 30%">University</th><td>{{ $profile->university->name ?? '' }}</td></tr>
                 <tr><th>College</th><td>{{ $profile->college->name ?? '' }}</td></tr>
-                <tr><th>Stream</th><td>{{ $profile->stream->name ?? '' }}</td></tr>
-                <tr><th>Subject</th><td>{{ $profile->subject->name ?? '' }}</td></tr>
+                <tr><th>Course (Stream)</th><td>{{ $profile->stream->name ?? '' }}</td></tr>
+                <tr><th>Major Subject</th><td>{{ $profile->subject->name ?? '' }}</td></tr>
                 <tr><th>Class / Semester</th><td>{{ $profile->class_semester }}</td></tr>
                 <tr><th>Year of study</th><td>{{ $profile->year_of_study }}</td></tr>
-                <tr><th>Registration number</th><td>{{ $profile->registration_number }}</td></tr>
-                <tr><th>Roll number</th><td>{{ $profile->roll_number }}</td></tr>
+                <tr><th>University registration number</th><td>{{ $profile->registration_number }}</td></tr>
+                <tr><th>University roll number</th><td>{{ $profile->roll_number }}</td></tr>
                 <tr><th>Academic session</th><td>{{ $profile->academic_session }}</td></tr>
             </tbody>
         </table>

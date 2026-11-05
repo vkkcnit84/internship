@@ -174,8 +174,8 @@ return [
         ],
     ],
     'stream' => [
-        'title'          => 'Streams',
-        'title_singular' => 'Stream',
+        'title'          => 'Courses (Streams)',
+        'title_singular' => 'Course (Stream)',
         'fields'         => [
             'id' => 'ID',
             'college_id' => 'College',
@@ -183,17 +183,17 @@ return [
         ],
     ],
     'subject' => [
-        'title'          => 'Subjects',
-        'title_singular' => 'Subject',
+        'title'          => 'Major Subjects',
+        'title_singular' => 'Major Subject',
         'fields'         => [
             'id' => 'ID',
-            'stream_id' => 'Stream',
+            'stream_id' => 'Course (Stream)',
             'name' => 'Name',
         ],
     ],
     'internship' => [
-        'title'          => 'Internships',
-        'title_singular' => 'Internship',
+        'title'          => 'Internship Domains',
+        'title_singular' => 'Internship Domain',
         'fields'         => [
             'id' => 'ID',
             'name' => 'Name',
@@ -210,7 +210,7 @@ return [
         'fields'         => [
             'id' => 'ID',
             'title' => 'Title',
-            'internship' => 'Internship',
+            'internship' => 'Internship Domain',
             'college' => 'College',
             'mode' => 'Mode',
             'schedule' => 'Repeats',
@@ -227,11 +227,11 @@ return [
             'student' => 'Student',
             'email' => 'Email',
             'mobile' => 'Mobile',
-            'internship' => 'Internship',
+            'internship' => 'Internship Domain',
             'university' => 'University',
             'college' => 'College',
-            'stream' => 'Stream',
-            'subject' => 'Subject',
+            'stream' => 'Course (Stream)',
+            'subject' => 'Major Subject',
             'total_amount' => 'Total (INR)',
             'status' => 'Status',
             'paid_at' => 'Paid at',

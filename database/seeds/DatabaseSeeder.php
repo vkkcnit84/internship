@@ -18,6 +18,7 @@ class DatabaseSeeder extends Seeder
             EnrollmentsTableSeeder::class,
             InternshipPermissionsSeeder::class,
             InternshipClassPermissionsSeeder::class,
+            InternshipRegistrationAmountPermissionSeeder::class,
             InternshipsTableSeeder::class,
         ]);
     }

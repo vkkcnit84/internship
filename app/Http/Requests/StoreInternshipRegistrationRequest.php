@@ -50,9 +50,9 @@ class StoreInternshipRegistrationRequest extends FormRequest
             'mobile.regex'        => 'Enter a valid 10-digit Indian mobile number.',
             'whatsapp.regex'      => 'Enter a valid 10-digit Indian WhatsApp number.',
             'college_id.exists'   => 'The selected college does not belong to the selected university.',
-            'stream_id.exists'    => 'The selected stream does not belong to the selected college.',
-            'subject_id.exists'   => 'The selected subject does not belong to the selected stream.',
-            'internship_id.exists' => 'The selected programme is not available for your college.',
+            'stream_id.exists'    => 'The selected course (stream) does not belong to the selected college.',
+            'subject_id.exists'   => 'The selected major subject does not belong to the selected course (stream).',
+            'internship_id.exists' => 'The selected internship domain is not available for your college.',
             'payment_method.in'   => 'Invalid payment method selected.',
         ];
     }
@@ -61,15 +61,15 @@ class StoreInternshipRegistrationRequest extends FormRequest
     {
         return [
             'guardian_name'       => 'parent / guardian name',
-            'internship_id'       => 'programme',
+            'internship_id'       => 'internship domain',
             'university_id'       => 'university',
             'college_id'          => 'college',
-            'stream_id'           => 'stream',
+            'stream_id'           => 'course (stream)',
             'subject_id'          => 'major subject',
             'class_semester'      => 'class/semester',
             'year_of_study'       => 'year of study',
-            'registration_number' => 'registration number',
-            'roll_number'         => 'roll number',
+            'registration_number' => 'university registration number',
+            'roll_number'         => 'university roll number',
             'academic_session'    => 'academic session',
             'payment_method'      => 'payment method',
         ];

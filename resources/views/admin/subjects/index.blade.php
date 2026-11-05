@@ -13,7 +13,7 @@
 @if(!auth()->user()->isCollegeAdmin())
 <div class="card" style="margin-bottom: 20px;">
     <div class="card-header">
-        <i class="fas fa-filter"></i> Filter Subjects
+        <i class="fas fa-filter"></i> Filter Major Subjects
     </div>
     <div class="card-body">
         <form method="GET">
@@ -30,9 +30,9 @@
                     </select>
                 </div>
                 <div class="form-group col-md-4">
-                    <label for="stream_id" class="font-weight-bold">Stream</label>
+                    <label for="stream_id" class="font-weight-bold">Course (Stream)</label>
                     <select name="stream_id" id="stream_id" class="form-control select2">
-                        <option value="">-- All Streams --</option>
+                        <option value="">-- All Courses (Streams) --</option>
                         @foreach($streams as $stream)
                             <option value="{{ $stream->id }}" data-college="{{ $stream->college_id }}" {{ request('stream_id') == $stream->id ? 'selected' : '' }}>
                                 {{ $stream->name }} ({{ $stream->college->name ?? 'N/A' }})
@@ -68,7 +68,7 @@
                         <th>{{ trans('cruds.subject.fields.id') }}</th>
                         <th>{{ trans('cruds.subject.fields.name') }}</th>
                         @if(!auth()->user()->isCollegeAdmin())
-                            <th>Stream</th>
+                            <th>Course (Stream)</th>
                             <th>College</th>
                         @endif
                         <th>&nbsp;</th>

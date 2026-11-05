@@ -148,25 +148,9 @@
                         </div>
                         <div class="form-row">
                             <div class="form-group col-md-6">
-                                <label for="internship_id">Programme</label>
-                                <select id="internship_id" name="internship_id" class="form-control @error('internship_id') is-invalid @enderror" data-placeholder="Select programme" data-disabled-placeholder="Select college first" required {{ old('college_id') ? '' : 'disabled' }}>
-                                    <option value="">{{ old('college_id') ? 'Select programme' : 'Select college first' }}</option>
-                                    @foreach($internships as $internship)
-                                        <option value="{{ $internship->id }}" data-college="{{ $internship->college_id }}" {{ (string) old('internship_id') === (string) $internship->id ? 'selected' : '' }}
-                                            data-price="{{ number_format($internship->price, 2) }}"
-                                            data-tax="{{ rtrim(rtrim(number_format($internship->tax_percent, 2, '.', ''), '0'), '.') }}"
-                                            data-total="{{ number_format($internship->getTotalAmount(), 2) }}">
-                                            {{ $internship->name }}@if($internship->duration_weeks) ({{ $internship->duration_weeks }} weeks)@endif
-                                        </option>
-                                    @endforeach
-                                </select>
-                                <div class="price-hint" id="priceHint"></div>
-                                @error('internship_id')<div class="invalid-feedback">{{ $message }}</div>@enderror
-                            </div>
-                            <div class="form-group col-md-6">
-                                <label for="stream_id">Stream</label>
-                                <select id="stream_id" name="stream_id" class="form-control @error('stream_id') is-invalid @enderror" data-placeholder="Select stream" data-disabled-placeholder="Select college first" required {{ old('college_id') ? '' : 'disabled' }}>
-                                    <option value="">{{ old('college_id') ? 'Select stream' : 'Select college first' }}</option>
+                                <label for="stream_id">Course (Stream)</label>
+                                <select id="stream_id" name="stream_id" class="form-control @error('stream_id') is-invalid @enderror" data-placeholder="Select course (stream)" data-disabled-placeholder="Select college first" required {{ old('college_id') ? '' : 'disabled' }}>
+                                    <option value="">{{ old('college_id') ? 'Select course (stream)' : 'Select college first' }}</option>
                                     @foreach($streams as $stream)
                                         <option value="{{ $stream->id }}" {{ (string) old('stream_id') === (string) $stream->id ? 'selected' : '' }}>{{ $stream->name }}</option>
                                     @endforeach
@@ -182,6 +166,23 @@
                                     @endforeach
                                 </select>
                                 @error('subject_id')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="internship_id">Internship Domain</label>
+                                <select id="internship_id" name="internship_id" class="form-control @error('internship_id') is-invalid @enderror" data-placeholder="Select internship domain" data-disabled-placeholder="Select college first" required {{ old('college_id') ? '' : 'disabled' }}>
+                                    <option value="">{{ old('college_id') ? 'Select internship domain' : 'Select college first' }}</option>
+                                    @foreach($internships as $internship)
+                                        <option value="{{ $internship->id }}" data-college="{{ $internship->college_id }}" {{ (string) old('internship_id') === (string) $internship->id ? 'selected' : '' }}
+                                            data-price="{{ number_format($internship->price, 2) }}"
+                                            data-tax="{{ rtrim(rtrim(number_format($internship->tax_percent, 2, '.', ''), '0'), '.') }}"
+                                            data-total="{{ number_format($internship->getTotalAmount(), 2) }}">
+                                            {{ $internship->name }}@if($internship->duration_weeks) ({{ $internship->duration_weeks }} weeks)@endif
+                                        </option>
+                                    @endforeach
+                                </select>
+                                {{-- Fee hint hidden for now; may be needed in future (also see showPrice() in the script below).
+                                <div class="price-hint" id="priceHint"></div> --}}
+                                @error('internship_id')<div class="invalid-feedback">{{ $message }}</div>@enderror
                             </div>
                         </div>
                         <div class="form-row">
@@ -206,14 +207,14 @@
                                 @error('year_of_study')<div class="invalid-feedback">{{ $message }}</div>@enderror
                             </div>
                             <div class="form-group col-md-6">
-                                <label for="registration_number">Registration Number</label>
+                                <label for="registration_number">University Registration Number</label>
                                 <input type="text" id="registration_number" name="registration_number" class="form-control @error('registration_number') is-invalid @enderror" value="{{ old('registration_number') }}" maxlength="100" required>
                                 @error('registration_number')<div class="invalid-feedback">{{ $message }}</div>@enderror
                             </div>
                         </div>
                         <div class="form-row">
                             <div class="form-group col-md-6">
-                                <label for="roll_number">Roll Number</label>
+                                <label for="roll_number">University Roll Number</label>
                                 <input type="text" id="roll_number" name="roll_number" class="form-control @error('roll_number') is-invalid @enderror" value="{{ old('roll_number') }}" maxlength="100" required>
                                 @error('roll_number')<div class="invalid-feedback">{{ $message }}</div>@enderror
                             </div>
@@ -354,6 +355,7 @@
     // Programme price hint
     var programme = el('internship_id'), hint = el('priceHint');
     function showPrice() {
+        if (!hint) { return; } // fee hint is commented out in the markup for now
         var o = programme.options[programme.selectedIndex];
         if (!o || !o.dataset.total) { hint.textContent = ''; return; }
         hint.textContent = parseFloat(o.dataset.tax) > 0

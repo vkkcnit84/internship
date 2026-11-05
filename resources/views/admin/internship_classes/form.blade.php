@@ -34,7 +34,7 @@
                     </div>
                 @endif
                 <div class="form-group {{ auth()->user()->isCollegeAdmin() ? 'col-md-12' : 'col-md-6' }}">
-                    <label for="internship_id">Internship *</label>
+                    <label for="internship_id">Internship Domain *</label>
                     <select id="internship_id" name="internship_id" class="form-control" required></select>
                     @if($errors->has('internship_id'))
                         <em class="invalid-feedback" style="display: block;">{{ $errors->first('internship_id') }}</em>

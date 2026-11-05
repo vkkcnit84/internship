@@ -63,17 +63,23 @@ class StudentProfile extends Model
     }
 
     /**
-     * Sessions such as "2025-26", from two years back to next year.
+     * Sessions such as "2025-26", from two years back to next year,
+     * plus the four-year programme sessions.
      */
     public static function academicSessionOptions()
     {
-        $options = [];
+        $options = [
+            '2024-28' => '2024-28',
+            '2025-29' => '2025-29',
+        ];
         $year    = (int) date('Y');
 
         foreach (range($year - 2, $year + 1) as $start) {
             $session           = $start . '-' . substr($start + 1, -2);
             $options[$session] = $session;
         }
+
+        ksort($options);
 
         return $options;
     }

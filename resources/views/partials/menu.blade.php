@@ -10,9 +10,21 @@
                     </a>
                 </li>
                 <li class="nav-item">
+                    <a href="{{ route('admin.student.registration-slip') }}" class="nav-link {{ request()->routeIs('admin.student.registration-slip') ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-fw fa-receipt"></i>
+                        Registration Slip
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a href="{{ route('admin.student.welcome-letter') }}" class="nav-link {{ request()->routeIs('admin.student.welcome-letter') ? 'active' : '' }}">
                         <i class="nav-icon fas fa-fw fa-file-alt"></i>
-                        Welcome Letter
+                        Consent Letter
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('admin.student.acceptance-letter') }}" class="nav-link {{ request()->routeIs('admin.student.acceptance-letter') ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-fw fa-file-signature"></i>
+                        Internship Acceptance Letter
                     </a>
                 </li>
             @else

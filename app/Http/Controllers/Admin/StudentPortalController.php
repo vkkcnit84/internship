@@ -31,6 +31,30 @@ class StudentPortalController extends Controller
         ]);
     }
 
+    public function registrationSlip()
+    {
+        $user = $this->student();
+        $user->load('studentProfile.university', 'studentProfile.college', 'studentProfile.stream', 'studentProfile.subject');
+
+        return view('admin.student.registration_slip', [
+            'user'          => $user,
+            'profile'       => $user->studentProfile,
+            'registrations' => $user->internshipRegistrations()->with('internship', 'payments')->latest()->get(),
+        ]);
+    }
+
+    public function acceptanceLetter()
+    {
+        $user = $this->student();
+        $user->load('studentProfile.university', 'studentProfile.college');
+
+        return view('admin.student.acceptance_letter', [
+            'user'          => $user,
+            'profile'       => $user->studentProfile,
+            'registrations' => $user->internshipRegistrations()->with('internship')->latest()->get(),
+        ]);
+    }
+
     private function student()
     {
         $user = auth()->user();

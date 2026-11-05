@@ -9,7 +9,7 @@
         <table class="table table-bordered table-striped">
             <tbody>
                 <tr><th style="width: 25%">Title</th><td>{{ $class->title }}</td></tr>
-                <tr><th>Internship</th><td>{{ $class->internship->name ?? '' }}</td></tr>
+                <tr><th>Internship Domain</th><td>{{ $class->internship->name ?? '' }}</td></tr>
                 <tr><th>College</th><td>{{ $class->internship->college->full_name ?? '' }}</td></tr>
                 @if($class->description)
                     <tr><th>Description</th><td>{!! nl2br(e($class->description)) !!}</td></tr>

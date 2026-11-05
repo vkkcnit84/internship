@@ -47,6 +47,32 @@ class InternshipRegistrationsController extends Controller
         return view('admin.internship_registrations.index', compact('registrations', 'universities', 'colleges'));
     }
 
+    public function consentLetter(InternshipRegistration $registration)
+    {
+        return $this->letter($registration, 'admin.student.welcome_letter');
+    }
+
+    public function acceptanceLetter(InternshipRegistration $registration)
+    {
+        return $this->letter($registration, 'admin.student.acceptance_letter');
+    }
+
+    /**
+     * Shows a student's letter to an admin; reuses the views the student portal renders.
+     */
+    private function letter(InternshipRegistration $registration, $view)
+    {
+        abort_if(Gate::denies('internship_registration_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+
+        $registration->load('internship', 'user.studentProfile.university', 'user.studentProfile.college', 'user.studentProfile.stream', 'user.studentProfile.subject');
+
+        return view($view, [
+            'user'          => $registration->user,
+            'profile'       => $registration->user->studentProfile,
+            'registrations' => collect([$registration]),
+        ]);
+    }
+
     public function approve(InternshipRegistration $registration)
     {
         abort_if(Gate::denies('internship_registration_approve'), Response::HTTP_FORBIDDEN, '403 Forbidden');

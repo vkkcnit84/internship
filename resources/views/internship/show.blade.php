@@ -37,11 +37,11 @@
                     <table class="table table-bordered">
                         <tbody>
                             <tr><th>Student</th><td>{{ $registration->user->name }} ({{ $registration->user->email }})</td></tr>
-                            <tr><th>Programme</th><td>{{ $registration->internship->name }}</td></tr>
+                            <tr><th>Internship Domain</th><td>{{ $registration->internship->name }}</td></tr>
                             @if($profile)
                                 <tr><th>University</th><td>{{ $profile->university->name ?? '' }}</td></tr>
                                 <tr><th>College</th><td>{{ $profile->college->name ?? '' }}</td></tr>
-                                <tr><th>Stream / Subject</th><td>{{ $profile->stream->name ?? '' }} / {{ $profile->subject->name ?? '' }}</td></tr>
+                                <tr><th>Course (Stream) / Major Subject</th><td>{{ $profile->stream->name ?? '' }} / {{ $profile->subject->name ?? '' }}</td></tr>
                             @endif
                             <tr><th>Fee</th><td>&#8377;{{ number_format($registration->price, 2) }}</td></tr>
                             @if($registration->tax_amount > 0)
